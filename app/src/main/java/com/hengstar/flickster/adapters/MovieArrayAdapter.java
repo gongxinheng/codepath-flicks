@@ -2,6 +2,7 @@ package com.hengstar.flickster.adapters;
 
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -57,12 +58,20 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
         // clear out image from convertView
         viewHolder.ivImage.setImageResource(0);
 
+        int orientation = convertView.getResources().getConfiguration().orientation;
+        populateData(viewHolder, movie, orientation == Configuration.ORIENTATION_LANDSCAPE);
+
+        // return the view
+        return convertView;
+    }
+
+    private void populateData(ViewHolder viewHolder, Movie movie, boolean landscape) {
         // populate data
         viewHolder.tvTitle.setText(movie.getOriginalTitle());
         viewHolder.tvOverview.setText(movie.getOverView());
 
-        Picasso.with(getContext()).load(movie.getPosterPath()).into(viewHolder.ivImage);
-        // return the view
-        return convertView;
+        String posterPath = landscape ? movie.getBackdropPath() : movie.getPosterPath();
+
+        Picasso.with(getContext()).load(posterPath).into(viewHolder.ivImage);
     }
 }
