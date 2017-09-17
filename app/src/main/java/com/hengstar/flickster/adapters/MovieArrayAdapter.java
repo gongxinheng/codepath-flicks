@@ -27,6 +27,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     static class ViewHolder {
         @BindView(R.id.ivMovieImage) ImageView ivImage;
+        @BindView(R.id.ivPlay) ImageView ivPlay;
         @BindView(R.id.tvTitle) TextView tvTitle;
         @BindView(R.id.tvOverview) TextView tvOverview;
 
@@ -34,6 +35,9 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
             ButterKnife.bind(this, view);
         }
     }
+
+    // the threshold that a movie should be marked as popular
+    private static double POPULARITY_THRESHOLD = 250;
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
@@ -63,7 +67,6 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
         int orientation = convertView.getResources().getConfiguration().orientation;
         populateData(viewHolder, movie, orientation == Configuration.ORIENTATION_LANDSCAPE);
-
         // return the view
         return convertView;
     }
@@ -82,5 +85,12 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
                 .fit()
                 .transform(new RoundedCornersTransformation(20, 20))
                 .into(viewHolder.ivImage);
+
+        // set play icon as foreground if it is popular
+        if (movie.getPopularity() > POPULARITY_THRESHOLD) {
+            viewHolder.ivPlay.setVisibility(View.VISIBLE);
+        } else {
+            viewHolder.ivPlay.setVisibility(View.GONE);
+        }
     }
 }

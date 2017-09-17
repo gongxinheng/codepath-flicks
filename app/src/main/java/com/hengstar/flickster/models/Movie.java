@@ -24,16 +24,22 @@ public class Movie {
         return overView;
     }
 
+    public double getPopularity() {
+        return popularity;
+    }
+
     private String posterPath;
     private String backdropPath;
     private String originalTitle;
     private String overView;
+    private double popularity;
 
     public Movie(JSONObject jsonObject) throws JSONException {
         this.posterPath = jsonObject.getString("poster_path");
         this.backdropPath = jsonObject.getString("backdrop_path");
         this.originalTitle = jsonObject.getString("original_title");
         this.overView = jsonObject.getString("overview");
+        this.popularity = jsonObject.getDouble("popularity");
     }
 
     public static ArrayList<Movie> fromJSONArray(JSONArray array) {
