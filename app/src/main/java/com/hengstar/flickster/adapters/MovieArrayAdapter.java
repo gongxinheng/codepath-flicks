@@ -19,15 +19,19 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import static com.hengstar.flickster.R.id.tvOverview;
-import static com.hengstar.flickster.R.id.tvTitle;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
-    private static class ViewHolder {
-        ImageView ivImage;
-        TextView tvTitle;
-        TextView tvOverview;
+    static class ViewHolder {
+        @BindView(R.id.ivMovieImage) ImageView ivImage;
+        @BindView(R.id.tvTitle) TextView tvTitle;
+        @BindView(R.id.tvOverview) TextView tvOverview;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
@@ -44,12 +48,9 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
         // check the existing view being reused
         if (convertView == null) {
-            viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_movie, parent, false);
-            viewHolder.ivImage = convertView.findViewById(R.id.ivMovieImage);
-            viewHolder.tvTitle = convertView.findViewById(tvTitle);
-            viewHolder.tvOverview = convertView.findViewById(tvOverview);
+            viewHolder = new ViewHolder(convertView);
             // Cache the viewHolder object inside the fresh view
             convertView.setTag(viewHolder);
         } else {
