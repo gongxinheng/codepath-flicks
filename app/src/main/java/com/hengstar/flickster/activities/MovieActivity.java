@@ -1,9 +1,10 @@
-package com.hengstar.flickster;
+package com.hengstar.flickster.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ListView;
 
+import com.hengstar.flickster.R;
 import com.hengstar.flickster.adapters.MovieArrayAdapter;
 import com.hengstar.flickster.models.Movie;
 
@@ -46,7 +47,7 @@ public class MovieActivity extends AppCompatActivity {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                //super.onFailure(statusCode, headers, responseString, throwable);
+                e.printStackTrace();
             }
 
             @Override

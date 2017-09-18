@@ -2,6 +2,7 @@ package com.hengstar.flickster.adapters;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
@@ -11,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hengstar.flickster.R;
+import com.hengstar.flickster.activities.MovieDetailActivity;
 import com.hengstar.flickster.models.Movie;
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +29,7 @@ import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
 public class MovieArrayAdapter extends ArrayAdapter<Movie> {
 
     static class ViewHolder {
+        @BindView(R.id.rlItemMovie) RelativeLayout rlItemMovie;
         @BindView(R.id.ivMovieImage) ImageView ivImage;
         @BindView(R.id.ivPlay) ImageView ivPlay;
         @BindView(R.id.tvTitle) TextView tvTitle;
@@ -37,7 +41,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     }
 
     // the threshold that a movie should be marked as popular
-    private static double POPULARITY_THRESHOLD = 250;
+    public static double POPULARITY_THRESHOLD = 250;
 
     public MovieArrayAdapter(Context context, List<Movie> movies) {
         super(context, android.R.layout.simple_list_item_1, movies);
@@ -47,7 +51,7 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         // get the data item for position
-        Movie movie = getItem(position);
+        final Movie movie = getItem(position);
 
         ViewHolder viewHolder; // view lookup cache stored in tag
 
@@ -62,8 +66,20 @@ public class MovieArrayAdapter extends ArrayAdapter<Movie> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
+        final Context context = convertView.getContext();
+
         // clear out image from convertView
         viewHolder.ivImage.setImageResource(0);
+        viewHolder.rlItemMovie.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // first parameter is the context, second is the class of the activity to launch
+                Intent i = new Intent(context, MovieDetailActivity.class);
+                // put "extras" into the bundle for access in the second activity
+                i.putExtra("movie_info", movie);
+                context.startActivity(i);
+            }
+        });
 
         int orientation = convertView.getResources().getConfiguration().orientation;
         populateData(viewHolder, movie, orientation == Configuration.ORIENTATION_LANDSCAPE);
